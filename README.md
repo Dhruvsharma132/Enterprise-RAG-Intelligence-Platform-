@@ -1,190 +1,266 @@
 # Enterprise RAG Intelligence Platform
 
+**Hybrid Retrieval | RBAC Security | Explainable AI | Multi-Agent Workflow**
+
 ## Overview
 
-The Enterprise RAG Intelligence Platform is a production-oriented Retrieval-Augmented Generation (RAG) system designed for enterprise knowledge discovery across multiple heterogeneous data sources including PDFs, CSV files, SQL databases, and JSON logs.
+The Enterprise RAG Intelligence Platform is a Retrieval-Augmented Generation (RAG) system designed to provide secure, explainable, and scalable access to enterprise knowledge across heterogeneous data sources. The platform supports retrieval from PDFs, CSV files, SQL records, and JSON logs while enforcing strict Role-Based Access Control (RBAC) policies to protect sensitive information.
 
-The platform combines semantic search, keyword retrieval, access control, and explainable AI techniques to deliver secure, grounded, and traceable responses.
+The solution combines semantic vector search with BM25 keyword retrieval, enabling accurate information discovery while minimizing hallucinations through grounded response generation, source citations, and confidence scoring.
 
 ---
 
 ## Key Features
 
-### Multi-Source Data Ingestion
+### Hybrid Retrieval
 
-The platform supports:
+The retrieval layer combines:
 
-* PDF documents
-* CSV datasets
-* SQL records
-* JSON logs
-* Enterprise reports
-* Operational records
+* BM25 Keyword Search
+* Semantic Vector Search
+* Retrieval Fusion
+* Document Reranking
 
-All documents are transformed into searchable chunks and indexed for retrieval.
+This approach improves both precision and recall compared to using either retrieval method independently.
 
 ---
 
-## Hybrid Retrieval Strategy
+### Query-Aware Routing
 
-Traditional keyword search often misses semantic meaning while vector search may overlook exact terms.
-
-To overcome these limitations, the system uses Hybrid Retrieval:
-
-Final Score = α × Semantic Similarity + β × BM25 Score
-
-Components:
-
-* BM25 keyword search
-* Dense vector embeddings
-* Semantic similarity search
-* Retrieval fusion
-
-Benefits:
-
-* Higher recall
-* Better precision
-* Improved enterprise search accuracy
-
----
-
-## Query Routing
-
-The Query Router analyzes user intent and routes requests to the most relevant retrieval pipeline.
+User queries are analyzed and routed to the most relevant knowledge source.
 
 Examples:
 
-| Query                             | Route             |
-| --------------------------------- | ----------------- |
-| "Show audit violations"           | Compliance Agent  |
-| "Summarize finance report"        | Finance Agent     |
-| "Engineering incidents last week" | Engineering Agent |
-
-This reduces unnecessary retrieval operations and improves response quality.
+| Query                      | Route       |
+| -------------------------- | ----------- |
+| Show audit violations      | Compliance  |
+| Summarize revenue report   | Finance     |
+| Investigate service outage | Engineering |
 
 ---
 
-## Role-Based Access Control (RBAC)
+### Role-Based Access Control (RBAC)
 
-Enterprise environments require strict security controls.
-
-The platform enforces RBAC at retrieval time.
+The platform enforces access restrictions before information reaches the language model.
 
 Example:
 
-Engineer:
+| Role               | Access                         |
+| ------------------ | ------------------------------ |
+| Engineer           | Engineering Documents          |
+| Finance Manager    | Finance Documents              |
+| Compliance Officer | Compliance + Finance Documents |
 
-* Engineering documents
-
-Finance Manager:
-
-* Finance documents
-
-Compliance Officer:
-
-* Compliance documents
-* Finance documents
-
-Unauthorized documents are filtered before reaching the language model.
-
-This prevents sensitive information leakage.
+Unauthorized documents are filtered prior to generation.
 
 ---
 
-## Grounded Response Generation
+### Explainable Responses
 
-Responses are generated only from retrieved context.
+Every generated response includes:
 
-The model is instructed to:
+* Source Citations
+* Confidence Score
+* Retrieved Evidence
 
-* Use retrieved evidence only
-* Avoid unsupported claims
-* Return citations
-* Report uncertainty
-
-This minimizes hallucinations.
+This improves transparency, traceability, and trust.
 
 ---
 
-## Citation Generation
+### Audit Logging
 
-Every response contains source references.
+The system logs:
 
-Example:
+* User
+* Role
+* Query
+* Retrieved Sources
 
-Sources:
-
-* engineering_report.pdf
-* audit_log_2026.json
-
-This enables traceability and auditability.
+This supports enterprise governance and compliance requirements.
 
 ---
 
-## Explainability
+## Architecture
 
-The platform provides:
+```text
+User Query
+     │
+     ▼
+Authentication
+     │
+     ▼
+RBAC Engine
+     │
+     ▼
+Query Router
+     │
+     ▼
+Hybrid Retrieval
+(BM25 + Vector Search)
+     │
+     ▼
+Document Reranker
+     │
+     ▼
+Metadata Filtering
+     │
+     ▼
+Response Synthesizer
+     │
+     ▼
+Citation Builder
+     │
+     ▼
+Confidence Scoring
+     │
+     ▼
+Final Response
+```
 
-* Source attribution
-* Retrieved evidence
-* Confidence score
-* Retrieval transparency
+---
 
-Example:
+## Multi-Agent Workflow
 
-Confidence: 92%
+The system follows a LangGraph-inspired workflow:
 
-The confidence score is derived from retrieval quality and evidence coverage.
+```text
+START
+  │
+  ▼
+Router Agent
+  │
+  ▼
+Retriever Agent
+  │
+  ▼
+Reranker
+  │
+  ▼
+RBAC Agent
+  │
+  ▼
+Synthesizer Agent
+  │
+  ▼
+Citation Builder
+  │
+  ▼
+END
+```
+
+---
+
+## Synthetic Enterprise Dataset
+
+The notebook demonstrates the platform using synthetic enterprise data including:
+
+* Engineering incident reports
+* Finance reports
+* Compliance audit logs
+* Operational service logs
+
+This simulates real-world enterprise knowledge repositories.
+
+---
+
+## Example Query
+
+### Input
+
+```text
+Show audit violations
+```
+
+### Response
+
+```json
+{
+  "answer": "Vendor audit violation detected during compliance review.",
+  "sources": [
+    "audit_log.json"
+  ],
+  "confidence": 0.85
+}
+```
+
+---
+
+## Security Controls
+
+The platform addresses:
+
+| Threat              | Mitigation                     |
+| ------------------- | ------------------------------ |
+| Unauthorized Access | RBAC Enforcement               |
+| Data Leakage        | Metadata Filtering             |
+| Prompt Injection    | Context-Constrained Generation |
+| Hallucinations      | Citation-Based Grounding       |
+| Compliance Auditing | Query Logging                  |
+
+---
+
+## Evaluation Metrics
+
+The system is designed to be evaluated using:
+
+### Retrieval Metrics
+
+* Precision@K
+* Recall@K
+
+### Generation Metrics
+
+* Faithfulness
+* Answer Relevancy
+* Context Precision
+
+### Security Metrics
+
+* RBAC Violation Rate
+* Unauthorized Retrieval Rate
+
+Target:
+
+```text
+RBAC Violations = 0%
+Unauthorized Retrieval Rate = 0%
+```
 
 ---
 
 ## Technology Stack
 
-### LLM
+### Core Components
 
-* Llama 3.3 (Ollama)
-
-### Retrieval
-
-* Qdrant
-* BM25
-* Sentence Transformers
-
-### Orchestration
-
-* LangGraph
-
-### API
-
-* FastAPI
-
-### Data Processing
-
+* Python
 * Pandas
-* PyMuPDF
+* Qdrant
+* Sentence Transformers
+* BM25
+* FastAPI (Architecture Layer)
+* LangGraph-Inspired Workflow
 
 ---
 
-## Security Features
+## Future Enhancements
 
-* Role-Based Access Control
-* Metadata Filtering
-* Source Traceability
-* Audit Logging
-* Restricted Document Access
-
----
-
-## Future Improvements
-
-* Multi-tenant deployment
-* Real-time streaming responses
-* Advanced reranking models
-* Distributed vector search
-* Human feedback integration
+* Production LangGraph Integration
+* Cross-Encoder Reranking
+* Redis Caching
+* Real-Time Streaming Responses
+* Distributed Vector Search
+* Multi-Tenant Deployment
+* Human-in-the-Loop Feedback
 
 ---
 
 ## Conclusion
 
-This platform demonstrates a secure, explainable, and scalable Enterprise RAG architecture capable of supporting production-level knowledge retrieval across multiple enterprise data sources.
+The Enterprise RAG Intelligence Platform demonstrates a secure and explainable approach to enterprise knowledge retrieval. By combining hybrid retrieval, RBAC enforcement, metadata filtering, citation generation, and confidence scoring, the platform provides grounded responses while maintaining enterprise-grade security, transparency, and scalability.
+
+---
+
+Author: Dhruv Sharma
+
+GitHub Repository:
+https://github.com/Dhruvsharma132/Enterprise-RAG-Intelligence-Platform-
